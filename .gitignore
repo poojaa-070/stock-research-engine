@@ -1,0 +1,36 @@
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Java
+backend/target/
+
+# Python
+scraper/__pycache__/
+scraper/**/__pycache__/
+scraper/*.pyc
+scraper/.venv/
+scraper/.pytest_cache/
+
+# env
+.env
+frontend/.env
+
+# Secrets and local environment files
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Local databases and backups
+*.sql.bak
+*.dump
+*.sqlite
+*.db
+
+# IDE and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

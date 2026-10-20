@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-ledger-bg text-ledger-ink font-body antialiased;
+  }
+}
+
+/* Subtle depth instead of a flat solid navy — a soft radial glow anchored
+   top-center, fixed so it doesn't scroll with content. Restrained: one
+   gradient, no repeated decoration per section. */
+.bg-ledger-hero {
+  background-color: #0F1B2A;
+  background-image: radial-gradient(
+    ellipse 900px 500px at 50% -10%,
+    rgba(201, 162, 39, 0.07),
+    transparent 60%
+  );
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Tabular figures everywhere numbers appear in a row, so columns align. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Smooth expand/collapse for category evidence and other disclosure UI. */
+@media (prefers-reduced-motion: no-preference) {
+  .transition-height {
+    transition: max-height 0.25s ease;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Motion: buttons + stock-market-themed loaders.
+   All keyframes are gated behind prefers-reduced-motion so nothing here
+   moves for someone who's asked their system not to animate.
+   --------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Generic "this is tappable" affordance -- lift slightly on hover, settle
+     back down on press. Applied to every primary/secondary button. */
+  .btn-animated {
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .btn-animated:hover {
+    transform: translateY(-1px);
+  }
+  .btn-animated:active {
+    transform: translateY(0) scale(0.97);
+  }
+
+  .row-animated {
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+  .row-animated:hover {
+    transform: translateX(2px);
+  }
+
+  @keyframes fade-slide-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse-slow {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+  .animate-pulse-slow {
+    animation: pulse-slow 1.8s ease-in-out infinite;
+  }
+
+  @keyframes candle-grow {
+    from {
+      transform: scaleY(0.15);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+  .animate-candle {
+    transform-origin: bottom;
+    animation: candle-grow 0.9s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  }
+
+  @keyframes ticker-scroll {
+    from {
+      transform: translateX(0%);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  .animate-ticker {
+    animation: ticker-scroll 14s linear infinite;
+  }
+
+  @keyframes line-draw {
+    from {
+      stroke-dashoffset: 400;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .animate-line-draw {
+    stroke-dasharray: 400;
+    animation: line-draw 2.2s ease-in-out infinite;
+  }
+
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .animate-spin-slow {
+    animation: spin-slow 2.4s linear infinite;
+  }
+}
+
+/* v2: print / "Save as PDF" from the report page. The dark ledger theme is
+   swapped for ink on paper and interactive chrome is hidden. */
+@media print {
+  body, .bg-ledger-hero { background: #fff !important; color: #111 !important; }
+  .bg-ledger-hero { background-image: none !important; }
+  .text-ledger-ink { color: #111 !important; }
+  .text-ledger-faint { color: #555 !important; }
+  .border-ledger-line { border-color: #ccc !important; }
+  [class*="bg-ledger-panel"] { background: transparent !important; }
+  section { break-inside: avoid; }
+  * { animation: none !important; transition: none !important; }
+}
+
+/* Visible keyboard focus everywhere (buttons, links, inputs). */
+:focus-visible {
+  outline: 1px solid #C9A227;
+  outline-offset: 2px;
+}
