@@ -34,3 +34,8 @@ frontend/.env
 .idea/
 .DS_Store
 Thumbs.db
+
+# Local Neon configuration
+.neon
+.agents/
+skills-lock.json
