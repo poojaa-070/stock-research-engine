@@ -26,10 +26,16 @@ class RateLimitedClient:
             time.sleep(wait)
         _last_request_at[self.base_url] = time.monotonic()
 
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
+   
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10), reraise=True)
     def get(self, path: str, **kwargs) -> requests.Response:
         self._throttle()
         url = path if path.startswith("http") else f"{self.base_url}{path}"
         resp = self.session.get(url, timeout=15, **kwargs)
+
+        if not resp.ok:
+            print(f"[HTTP ERROR] {resp.status_code} for {url}")
+            print(f"[HTTP ERROR] Response: {resp.text[:300]}")
         resp.raise_for_status()
         return resp
+
